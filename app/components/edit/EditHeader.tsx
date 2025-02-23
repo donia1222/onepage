@@ -1,48 +1,71 @@
-import { useState, useEffect } from 'react';
-import { Form, useSubmit } from '@remix-run/react';
+"use client"
+
+import type React from "react"
+
+import { useState, useEffect } from "react"
+import { Form, useSubmit } from "@remix-run/react"
+import { supabase } from "~/lib/supabaseClient"
 
 interface HeaderData {
-  title: string;
-  subtitle: string;
-  logoUrl: string;
+  id: number
+  title: string
+  subtitle: string
+  logoUrl: string
 }
 
 interface EditHeaderProps {
-  initialData: HeaderData;
-  actionData?: HeaderData;
+  initialData: HeaderData
+  actionData?: HeaderData
 }
 
 export default function EditHeader({ initialData, actionData }: EditHeaderProps) {
-  const [headerData, setHeaderData] = useState<HeaderData>(initialData);
-  const [saveSuccess, setSaveSuccess] = useState(false);
-  const submit = useSubmit();
+  const [headerData, setHeaderData] = useState<HeaderData>(initialData)
+  const [saveSuccess, setSaveSuccess] = useState(false)
+  const submit = useSubmit()
 
   useEffect(() => {
     if (actionData) {
-      setHeaderData(actionData);
-      setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 3000);
-      localStorage.setItem('headerData', JSON.stringify(actionData));
+      setHeaderData(actionData)
+      setSaveSuccess(true)
+      setTimeout(() => setSaveSuccess(false), 3000)
     }
-  }, [actionData]);
+  }, [actionData])
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    submit(event.currentTarget, { method: 'post' });
-  };
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    const { data, error } = await supabase
+      .from("header")
+      .upsert({ ...headerData, id: 1 })
+      .select()
+      .single()
+
+    if (error) {
+      console.error("Error updating header:", error)
+    } else {
+      setHeaderData(data)
+      setSaveSuccess(true)
+      setTimeout(() => setSaveSuccess(false), 3000)
+    }
+  }
 
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-xl font-bold mb-4">Edit Header</h2>
       {saveSuccess && (
-        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+        <div
+          className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"
+          role="alert"
+        >
           <strong className="font-bold">Success!</strong>
           <span className="block sm:inline"> Changes saved successfully.</span>
         </div>
       )}
       <Form method="post" onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="title" className="block">Title:</label>
+          <label htmlFor="title" className="block">
+            Title:
+          </label>
           <input
             type="text"
             id="title"
@@ -53,7 +76,9 @@ export default function EditHeader({ initialData, actionData }: EditHeaderProps)
           />
         </div>
         <div>
-          <label htmlFor="subtitle" className="block">Subtitle:</label>
+          <label htmlFor="subtitle" className="block">
+            Subtitle:
+          </label>
           <input
             type="text"
             id="subtitle"
@@ -64,7 +89,9 @@ export default function EditHeader({ initialData, actionData }: EditHeaderProps)
           />
         </div>
         <div>
-          <label htmlFor="logoUrl" className="block">Logo URL:</label>
+          <label htmlFor="logoUrl" className="block">
+            Logo URL:
+          </label>
           <input
             type="text"
             id="logoUrl"
@@ -92,5 +119,6 @@ export default function EditHeader({ initialData, actionData }: EditHeaderProps)
         </div>
       </div>
     </div>
-  );
+  )
 }
+
