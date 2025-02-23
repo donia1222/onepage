@@ -12,7 +12,9 @@ export default function Index() {
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <Header />
-      <Header />
+
+        <h2 className="text-xl font-bold mb-4">Edit Header</h2>
+ 
     </div>
   );
 }
