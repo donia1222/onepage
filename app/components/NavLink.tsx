@@ -14,7 +14,7 @@ export default function NavigationPanel() {
   }, []);
 
   return (
-    <nav className="bg-gray-700 p-4">
+    <nav className="p-4">
       <div className="flex items-center justify-between">
    
         <button

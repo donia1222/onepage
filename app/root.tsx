@@ -7,7 +7,7 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
-import NavigationPanel from "./components/NavLink";
+
 import LoaderOverlay from "./components/LoaderOverlay";
 import { useState, useEffect } from "react";
 
@@ -32,7 +32,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   // Aquí puedes usar una lógica para determinar cuándo se ha cargado todo.
   // Por ejemplo, simulamos una carga de 3 segundos.
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 100);
+    const timer = setTimeout(() => setIsLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -46,7 +46,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {isLoading && <LoaderOverlay />}
-        <NavigationPanel />
+     
         {children}
         <ScrollRestoration />
         <Scripts />

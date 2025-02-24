@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { supabase } from "~/lib/supabaseClient"
+import NavigationPanel from "./NavLink";
+
 
 interface HeaderData {
   id: number
@@ -55,7 +57,7 @@ export default function Header() {
             <p className="text-sm text-blue-200 italic">{headerData.subtitle}</p>
           </div>
         </div>
-
+        <NavigationPanel />
       </div>
     </header>
   )

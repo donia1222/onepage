@@ -74,6 +74,7 @@ export default function EditHeader({ initialData, actionData, onSave }: EditHead
 
   return (
     <div className="container mx-auto p-4">
+      
       <h2 className="text-xl font-bold mb-4">Edit Header</h2>
       {saveSuccess && (
         <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">

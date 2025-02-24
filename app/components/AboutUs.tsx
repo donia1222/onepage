@@ -28,11 +28,7 @@ export default function AboutUs() {
         setAboutData(JSON.parse(storedData))
       }
 
-      const { data, error } = await supabase
-        .from("about")
-        .select("*")
-        .eq("id", 1)
-        .single()
+      const { data, error } = await supabase.from("about").select("*").eq("id", 1).single()
 
       if (!error && data) {
         setAboutData(data)
@@ -47,52 +43,39 @@ export default function AboutUs() {
 
   if (!aboutData) return <div className="text-center p-4">Loading...</div>
 
-  // Función para resolver la URL de la imagen (si empieza con http, se usa tal cual, de lo contrario se carga de /uploads)
-  const resolveImageUrl = (url: string) =>
-    url.startsWith("http") ? url : `/uploads/${url.replace(/^uploads\//, "")}`
+  const resolveImageUrl = (url: string) => (url.startsWith("http") ? url : `/uploads/${url.replace(/^uploads\//, "")}`)
 
   return (
     <section className="py-12 bg-gray-50">
       <div className="container mx-auto px-4">
-        {/* Título y descripción principal */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold">{aboutData.maintitle}</h1>
-          <p className="mt-4 text-lg">{aboutData.maindescription}</p>
+          <h1 className="text-4xl font-bold text-gray-800 mb-3">{aboutData.maintitle}</h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">{aboutData.maindescription}</p>
         </div>
-        {/* Tres bloques lado a lado */}
-        <div className="flex flex-col md:flex-row md:space-x-4 space-y-4 md:space-y-0">
-          {/* Bloque 1 */}
-          <div className="flex-1 bg-white shadow-lg rounded p-4 text-center">
-            <img
-              src={resolveImageUrl(aboutData.block1image) || "/placeholder.svg"}
-              alt={aboutData.block1title}
-              className="mx-auto mb-4 w-32 h-32 object-cover rounded-full"
-            />
-            <h2 className="text-2xl font-semibold">{aboutData.block1title}</h2>
-            <p className="mt-2">{aboutData.block1description}</p>
-          </div>
-          {/* Bloque 2 */}
-          <div className="flex-1 bg-white shadow-lg rounded p-4 text-center">
-            <img
-              src={resolveImageUrl(aboutData.block2image) || "/placeholder.svg"}
-              alt={aboutData.block2title}
-              className="mx-auto mb-4 w-32 h-32 object-cover rounded-full"
-            />
-            <h2 className="text-2xl font-semibold">{aboutData.block2title}</h2>
-            <p className="mt-2">{aboutData.block2description}</p>
-          </div>
-          {/* Bloque 3 */}
-          <div className="flex-1 bg-white shadow-lg rounded p-4 text-center">
-            <img
-              src={resolveImageUrl(aboutData.block3image) || "/placeholder.svg"}
-              alt={aboutData.block3title}
-              className="mx-auto mb-4 w-32 h-32 object-cover rounded-full"
-            />
-            <h2 className="text-2xl font-semibold">{aboutData.block3title}</h2>
-            <p className="mt-2">{aboutData.block3description}</p>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            { image: aboutData.block1image, title: aboutData.block1title, description: aboutData.block1description },
+            { image: aboutData.block2image, title: aboutData.block2title, description: aboutData.block2description },
+            { image: aboutData.block3image, title: aboutData.block3title, description: aboutData.block3description },
+          ].map((block, index) => (
+            <div
+              key={index}
+              className="bg-white shadow-md rounded-lg overflow-hidden transition-transform duration-300 hover:scale-102"
+            >
+              <img
+                src={resolveImageUrl(block.image) || "/placeholder.svg"}
+                alt={block.title}
+                className="w-full h-48 object-cover"
+              />
+              <div className="p-4">
+                <h2 className="text-xl font-semibold text-gray-800 mb-2">{block.title}</h2>
+                <p className="text-sm text-gray-600">{block.description}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>
   )
 }
+
