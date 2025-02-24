@@ -1,3 +1,4 @@
+// app/root.tsx
 import {
   Links,
   Meta,
@@ -6,6 +7,9 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
+import NavigationPanel from "./components/NavLink";
+import LoaderOverlay from "./components/LoaderOverlay";
+import { useState, useEffect } from "react";
 
 import "./tailwind.css";
 
@@ -23,6 +27,15 @@ export const links: LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Aquí puedes usar una lógica para determinar cuándo se ha cargado todo.
+  // Por ejemplo, simulamos una carga de 3 segundos.
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <html lang="en">
       <head>
@@ -32,6 +45,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        {isLoading && <LoaderOverlay />}
+        <NavigationPanel />
         {children}
         <ScrollRestoration />
         <Scripts />

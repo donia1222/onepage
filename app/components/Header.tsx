@@ -15,58 +15,47 @@ export default function Header() {
 
   useEffect(() => {
     const fetchHeaderData = async () => {
-      const { data, error } = await supabase.from("header").select("*").eq("id", 1).single()
+      const storedData = localStorage.getItem("headerData")
+      if (storedData) {
+        setHeaderData(JSON.parse(storedData))
+      }
 
-      if (error) {
-        console.error("Error loading header data:", error)
-      } else {
+      const { data, error } = await supabase.from("header").select("*").eq("id", 1).single()
+      if (!error && data) {
         setHeaderData(data)
         localStorage.setItem("headerData", JSON.stringify(data))
       }
     }
 
-    // Función para verificar actualizaciones
-    const checkForUpdates = async () => {
-      const storedData = localStorage.getItem("headerData")
-      if (storedData) {
-        const parsedData = JSON.parse(storedData)
-        setHeaderData(parsedData)
-      }
-      await fetchHeaderData()
-    }
-
-    // Realizar la primera carga
     fetchHeaderData()
+    const intervalId = setInterval(fetchHeaderData, 5000)
 
-    // Configurar un intervalo para verificar actualizaciones cada 5 segundos
-    const intervalId = setInterval(checkForUpdates, 5000)
-
-    // Limpiar el intervalo al desmontar el componente
     return () => clearInterval(intervalId)
   }, [])
 
-  // Función para forzar una actualización inmediata
-  const forceUpdate = async () => {
-    const { data, error } = await supabase.from("header").select("*").eq("id", 1).single()
-    if (!error && data) {
-      setHeaderData(data)
-      localStorage.setItem("headerData", JSON.stringify(data))
-    }
-  }
 
-  if (!headerData) return <div>Loading...</div>
+
+  if (!headerData) return <div className="text-center p-4">Loading...</div>
+
+  const imageUrl = headerData.logoUrl.startsWith("http")
+    ? headerData.logoUrl
+    : `/uploads/${headerData.logoUrl.replace(/^uploads\//, "")}`
 
   return (
-    <header className="bg-blue-500 text-white p-4">
+    <header className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-6 px-4 shadow-lg">
       <div className="container mx-auto flex items-center justify-between">
-        <img src={headerData.logoUrl || "/placeholder.svg"} alt="Logo" className="h-12 w-auto" />
-        <div>
-          <h1 className="text-2xl font-bold">{headerData.title}</h1>
-          <p>{headerData.subtitle}</p>
+        <div className="flex items-center space-x-4">
+          <img
+            src={imageUrl || "/placeholder.svg"}
+            alt="Logo"
+            className="w-16 h-16 rounded-full border-2 border-white shadow-md object-cover"
+          />
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">{headerData.title}</h1>
+            <p className="text-sm text-blue-200 italic">{headerData.subtitle}</p>
+          </div>
         </div>
-        <button onClick={forceUpdate} className="bg-white text-blue-500 px-4 py-2 rounded">
-          Refresh
-        </button>
+
       </div>
     </header>
   )

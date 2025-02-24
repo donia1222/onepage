@@ -1,8 +1,9 @@
 import { json } from "@remix-run/node"
 import type { LoaderFunction } from "@remix-run/node"
-import { useLoaderData } from "@remix-run/react"
+import { useLoaderData, useFetcher } from "@remix-run/react"
 import { supabase } from "~/lib/supabaseClient"
 import EditHeader from "~/components/edit/EditHeader"
+import { useEffect, useState } from "react"
 
 interface HeaderData {
   id: number
@@ -24,12 +25,20 @@ export const loader: LoaderFunction = async () => {
 
 export default function AdminPanel() {
   const loaderData = useLoaderData<HeaderData>()
+  const fetcher = useFetcher()
+  const [headerData, setHeaderData] = useState(loaderData)
+
+  // Si `fetcher.data` tiene nuevos datos, actualiza el estado local
+  useEffect(() => {
+    if (fetcher.data) {
+      setHeaderData(fetcher.data)
+    }
+  }, [fetcher.data])
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Admin Panel</h1>
-      <EditHeader initialData={loaderData} />
+      <EditHeader initialData={headerData} onSave={() => fetcher.load("/admin")} />
     </div>
   )
 }
-

@@ -1,9 +1,7 @@
 "use client"
 
-import type React from "react"
-
 import { useState, useEffect } from "react"
-import { Form, useSubmit } from "@remix-run/react"
+import { Form } from "@remix-run/react"
 import { supabase } from "~/lib/supabaseClient"
 
 interface HeaderData {
@@ -16,15 +14,14 @@ interface HeaderData {
 interface EditHeaderProps {
   initialData: HeaderData
   actionData?: HeaderData
+  onSave?: () => void
 }
 
-export default function EditHeader({ initialData, actionData }: EditHeaderProps) {
+export default function EditHeader({ initialData, actionData, onSave }: EditHeaderProps) {
   const [headerData, setHeaderData] = useState<HeaderData>(initialData)
+  const [imageFile, setImageFile] = useState<File | null>(null)
   const [saveSuccess, setSaveSuccess] = useState(false)
-  const submit = useSubmit()
 
-  
-  
   useEffect(() => {
     if (actionData) {
       setHeaderData(actionData)
@@ -33,12 +30,35 @@ export default function EditHeader({ initialData, actionData }: EditHeaderProps)
     }
   }, [actionData])
 
+  const handleImageUpload = async () => {
+    if (!imageFile) return headerData.logoUrl;
+  
+    const formData = new FormData();
+    formData.append("file", imageFile);
+  
+    const response = await fetch("/upload", {
+      method: "POST",
+      body: formData,
+    });
+  
+    const result = await response.json();
+    if (result.success) {
+      return result.filePath.split("/").pop(); // 🔥 GUARDA SOLO EL NOMBRE DEL ARCHIVO
+    } else {
+      console.error("Error uploading image:", result.error);
+      return headerData.logoUrl;
+    }
+  };
+  
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
+    const uploadedImageUrl = await handleImageUpload()
+
     const { data, error } = await supabase
       .from("header")
-      .upsert({ ...headerData, id: 1 })
+      .upsert({ ...headerData, id: 1, logoUrl: uploadedImageUrl })
       .select()
       .single()
 
@@ -48,6 +68,7 @@ export default function EditHeader({ initialData, actionData }: EditHeaderProps)
       setHeaderData(data)
       setSaveSuccess(true)
       setTimeout(() => setSaveSuccess(false), 3000)
+      onSave?.()
     }
   }
 
@@ -55,19 +76,14 @@ export default function EditHeader({ initialData, actionData }: EditHeaderProps)
     <div className="container mx-auto p-4">
       <h2 className="text-xl font-bold mb-4">Edit Header</h2>
       {saveSuccess && (
-        <div
-          className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"
-          role="alert"
-        >
+        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
           <strong className="font-bold">Success!</strong>
           <span className="block sm:inline"> Changes saved successfully.</span>
         </div>
       )}
-      <Form method="post" onSubmit={handleSubmit} className="space-y-4">
+      <Form method="post" onSubmit={handleSubmit} className="space-y-4" encType="multipart/form-data">
         <div>
-          <label htmlFor="title" className="block">
-            Title:
-          </label>
+          <label htmlFor="title" className="block">Title:</label>
           <input
             type="text"
             id="title"
@@ -78,9 +94,7 @@ export default function EditHeader({ initialData, actionData }: EditHeaderProps)
           />
         </div>
         <div>
-          <label htmlFor="subtitle" className="block">
-            Subtitle:
-          </label>
+          <label htmlFor="subtitle" className="block">Subtitle:</label>
           <input
             type="text"
             id="subtitle"
@@ -91,15 +105,12 @@ export default function EditHeader({ initialData, actionData }: EditHeaderProps)
           />
         </div>
         <div>
-          <label htmlFor="logoUrl" className="block">
-            Logo URL:
-          </label>
+          <label htmlFor="logoFile" className="block">Upload Logo:</label>
           <input
-            type="text"
-            id="logoUrl"
-            name="logoUrl"
-            value={headerData.logoUrl}
-            onChange={(e) => setHeaderData({ ...headerData, logoUrl: e.target.value })}
+            type="file"
+            id="logoFile"
+            accept="image/*"
+            onChange={(e) => setImageFile(e.target.files?.[0] || null)}
             className="w-full border p-2"
           />
         </div>
@@ -107,20 +118,6 @@ export default function EditHeader({ initialData, actionData }: EditHeaderProps)
           Save Changes
         </button>
       </Form>
-
-      <div className="mt-8">
-        <h3 className="text-lg font-bold mb-2">Preview:</h3>
-        <div className="bg-blue-500 text-white p-4">
-          <div className="container mx-auto flex items-center justify-between">
-            <img src={headerData.logoUrl || "/placeholder.svg"} alt="Logo" className="h-12 w-auto" />
-            <div>
-              <h1 className="text-2xl font-bold">{headerData.title}</h1>
-              <p>{headerData.subtitle}</p>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   )
 }
-
