@@ -102,7 +102,14 @@ export default function NavigationPanel() {
                 Contact
               </a>
             </li>
-     
+            <li>
+              <a
+                href="/AdminPage"
+                className="block text-gray-300 hover:text-white"
+              >
+                Admin
+              </a>
+            </li>
           </ul>
         </div>
       )}
@@ -168,7 +175,11 @@ export default function NavigationPanel() {
             Contact
           </a>
         </li>
-  
+        <li>
+          <a href="/AdminPage" className="text-gray-300 hover:text-white">
+            Admin
+          </a>
+        </li>
       </ul>
     </nav>
   );
