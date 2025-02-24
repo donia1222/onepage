@@ -6,7 +6,7 @@
     "**/.server/**/*.tsx",
     "**/.client/**/*.ts",
     "**/.client/**/*.tsx"
-  ],
+, "app/components/NavigationPanel.tsx."  ],
   "compilerOptions": {
     "lib": [
       "DOM",
@@ -36,5 +36,4 @@
     },
     "noEmit": true
   },
-  "extends": "expo/tsconfig.base"
 }
