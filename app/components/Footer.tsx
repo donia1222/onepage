@@ -1,62 +1,61 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import { useState, useEffect } from "react"
-import { supabase } from "~/lib/supabaseClient"
-
+import type React from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "~/lib/supabaseClient";
+import { FiMail, FiPhone, FiMapPin } from "react-icons/fi"; // Reemplazo de Lucide
 
 interface FooterData {
-  id: number
-  companyname: string
-  phone: string
-  logourl: string
-  address: string
-  country: string
-  postal: string
-  email: string
+  id: number;
+  companyname: string;
+  phone: string;
+  logourl: string;
+  address: string;
+  country: string;
+  postal: string;
+  email: string;
 }
 
 export default function Footer() {
-  const [footerData, setFooterData] = useState<FooterData | null>(null)
+  const [footerData, setFooterData] = useState<FooterData | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
-  })
+  });
 
   useEffect(() => {
     const fetchFooterData = async () => {
-      const storedData = localStorage.getItem("footerData")
+      const storedData = localStorage.getItem("footerData");
       if (storedData) {
-        setFooterData(JSON.parse(storedData))
+        setFooterData(JSON.parse(storedData));
       }
-      const { data, error } = await supabase.from("footer").select("*").eq("id", 1).single()
+      const { data, error } = await supabase.from("footer").select("*").eq("id", 1).single();
       if (!error && data) {
-        setFooterData(data)
-        localStorage.setItem("footerData", JSON.stringify(data))
+        setFooterData(data);
+        localStorage.setItem("footerData", JSON.stringify(data));
       }
-    }
-    fetchFooterData()
-    const intervalId = setInterval(fetchFooterData, 5000)
-    return () => clearInterval(intervalId)
-  }, [])
+    };
+    fetchFooterData();
+    const intervalId = setInterval(fetchFooterData, 5000);
+    return () => clearInterval(intervalId);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const subject = `Contacto desde la web: ${formData.name}`
-    const body = `Nombre: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0AMensaje: ${formData.message}`
-    window.location.href = `mailto:${footerData?.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-  }
+    e.preventDefault();
+    const subject = `Contacto desde la web: ${formData.name}`;
+    const body = `Nombre: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0AMensaje: ${formData.message}`;
+    window.location.href = `mailto:${footerData?.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
 
   const resolveImageUrl = (url?: string) => {
-    if (!url) return "/placeholder.svg"
-    return url.startsWith("http") ? url : `/uploads/${url.replace(/^uploads\//, "")}`
-  }
+    if (!url) return "/placeholder.svg";
+    return url.startsWith("http") ? url : `/uploads/${url.replace(/^uploads\//, "")}`;
+  };
 
   return (
     <footer className="bg-gray-900 text-white py-12">
@@ -76,13 +75,13 @@ export default function Footer() {
                 </div>
                 <div className="space-y-2">
                   <p className="flex items-center">
-                   {footerData.phone}
+                    <FiPhone className="mr-2 h-5 w-5" /> {footerData.phone}
                   </p>
                   <p className="flex items-center">
-                  {footerData.address}, {footerData.country} - {footerData.postal}
+                    <FiMapPin className="mr-2 h-5 w-5" /> {footerData.address}, {footerData.country} - {footerData.postal}
                   </p>
                   <p className="flex items-center">
-                 {footerData.email}
+                    <FiMail className="mr-2 h-5 w-5" /> {footerData.email}
                   </p>
                 </div>
               </>
@@ -139,6 +138,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }
-

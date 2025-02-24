@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { FiHome, FiUser, FiBriefcase, FiImage, FiMail, FiTool } from "react-icons/fi"; // Íconos para las secciones
+import { FiMenu, FiX } from "react-icons/fi"; // Íconos para el menú hamburguesa
 
 export default function NavigationPanel() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -14,29 +16,18 @@ export default function NavigationPanel() {
   }, []);
 
   return (
-    <nav className="p-4">
+    <nav className="p-4  text-white">
       <div className="flex items-center justify-between">
+        {/* Botón de menú para móviles */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="text-white md:hidden"
+          className="md:hidden focus:outline-none"
           aria-label="Toggle navigation menu"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
+          {menuOpen ? <FiX className="h-6 w-6" /> : <FiMenu className="h-6 w-6" />}
         </button>
       </div>
+
       {/* Menú para móviles */}
       {menuOpen && (
         <div className="mt-4 md:hidden">
@@ -48,9 +39,9 @@ export default function NavigationPanel() {
                   e.preventDefault();
                   scrollToSection("home");
                 }}
-                className="block text-gray-300 hover:text-white"
+                className="flex items-center space-x-2 text-gray-300 hover:text-white"
               >
-                Home
+                <FiHome /> <span>Home</span>
               </a>
             </li>
             <li>
@@ -60,9 +51,9 @@ export default function NavigationPanel() {
                   e.preventDefault();
                   scrollToSection("about");
                 }}
-                className="block text-gray-300 hover:text-white"
+                className="flex items-center space-x-2 text-gray-300 hover:text-white"
               >
-                About
+                <FiUser /> <span>About</span>
               </a>
             </li>
             <li>
@@ -72,9 +63,9 @@ export default function NavigationPanel() {
                   e.preventDefault();
                   scrollToSection("services");
                 }}
-                className="block text-gray-300 hover:text-white"
+                className="flex items-center space-x-2 text-gray-300 hover:text-white"
               >
-                Services
+                <FiTool /> <span>Services</span>
               </a>
             </li>
             <li>
@@ -84,9 +75,9 @@ export default function NavigationPanel() {
                   e.preventDefault();
                   scrollToSection("gallery");
                 }}
-                className="block text-gray-300 hover:text-white"
+                className="flex items-center space-x-2 text-gray-300 hover:text-white"
               >
-                Gallery
+                <FiImage /> <span>Gallery</span>
               </a>
             </li>
             <li>
@@ -96,9 +87,9 @@ export default function NavigationPanel() {
                   e.preventDefault();
                   scrollToSection("contact");
                 }}
-                className="block text-gray-300 hover:text-white"
+                className="flex items-center space-x-2 text-gray-300 hover:text-white"
               >
-                Contact
+                <FiMail /> <span>Contact</span>
               </a>
             </li>
             <li>
@@ -106,16 +97,17 @@ export default function NavigationPanel() {
                 href="/AdminPage"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block text-gray-300 hover:text-white"
+                className="flex items-center space-x-2 text-gray-300 hover:text-white"
               >
-                Admin
+                <FiBriefcase /> <span>Admin</span>
               </a>
             </li>
           </ul>
         </div>
       )}
+
       {/* Menú para pantallas grandes */}
-      <ul className="hidden md:flex space-x-4">
+      <ul className="hidden md:flex space-x-6">
         <li>
           <a
             href="#home"
@@ -123,9 +115,9 @@ export default function NavigationPanel() {
               e.preventDefault();
               scrollToSection("home");
             }}
-            className="text-gray-300 hover:text-white"
+            className="flex items-center space-x-2 text-gray-300 hover:text-white"
           >
-            Home
+            <FiHome /> <span>Home</span>
           </a>
         </li>
         <li>
@@ -135,9 +127,9 @@ export default function NavigationPanel() {
               e.preventDefault();
               scrollToSection("about");
             }}
-            className="text-gray-300 hover:text-white"
+            className="flex items-center space-x-2 text-gray-300 hover:text-white"
           >
-            About
+            <FiUser /> <span>About</span>
           </a>
         </li>
         <li>
@@ -147,9 +139,9 @@ export default function NavigationPanel() {
               e.preventDefault();
               scrollToSection("services");
             }}
-            className="text-gray-300 hover:text-white"
+            className="flex items-center space-x-2 text-gray-300 hover:text-white"
           >
-            Services
+            <FiTool /> <span>Services</span>
           </a>
         </li>
         <li>
@@ -159,9 +151,9 @@ export default function NavigationPanel() {
               e.preventDefault();
               scrollToSection("gallery");
             }}
-            className="text-gray-300 hover:text-white"
+            className="flex items-center space-x-2 text-gray-300 hover:text-white"
           >
-            Gallery
+            <FiImage /> <span>Gallery</span>
           </a>
         </li>
         <li>
@@ -171,9 +163,9 @@ export default function NavigationPanel() {
               e.preventDefault();
               scrollToSection("contact");
             }}
-            className="text-gray-300 hover:text-white"
+            className="flex items-center space-x-2 text-gray-300 hover:text-white"
           >
-            Contact
+            <FiMail /> <span>Contact</span>
           </a>
         </li>
         <li>
@@ -181,9 +173,9 @@ export default function NavigationPanel() {
             href="/AdminPage"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-300 hover:text-white"
+            className="flex items-center space-x-2 text-gray-300 hover:text-white"
           >
-            Admin
+            <FiBriefcase /> <span>Admin</span>
           </a>
         </li>
       </ul>
