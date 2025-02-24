@@ -76,13 +76,13 @@ export default function Footer() {
                 </div>
                 <div className="space-y-2">
                   <p className="flex items-center">
-   
+                   {footerData.phone}
                   </p>
                   <p className="flex items-center">
-                  
+                  {footerData.address}, {footerData.country} - {footerData.postal}
                   </p>
                   <p className="flex items-center">
-              
+                 {footerData.email}
                   </p>
                 </div>
               </>
