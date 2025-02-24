@@ -2,16 +2,29 @@
 
 import { Link } from "@remix-run/react"
 
-const AdminButton = ({ title, href }: { title: string; href: string }) => (
+type AdminPageProps = {
+  onClose: () => void;
+};
+
+const AdminButton = ({
+  title,
+  href,
+  onClose,
+}: {
+  title: string;
+  href: string;
+  onClose: () => void;
+}) => (
   <Link
     to={href}
+    onClick={onClose} // Al presionar se cierra el overlay
     className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg text-center"
   >
     {title}
   </Link>
 )
 
-export default function AdminPage() {
+export default function AdminPage({ onClose }: AdminPageProps) {
   const adminLinks = [
     { title: "Administrar Header", path: "/adminHeader" },
     { title: "Administrar Hero Imagen", path: "/adminHero" },
@@ -29,11 +42,10 @@ export default function AdminPage() {
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {adminLinks.map((link, index) => (
-            <AdminButton key={index} title={link.title} href={link.path} />
+            <AdminButton key={index} title={link.title} href={link.path} onClose={onClose} />
           ))}
         </div>
       </div>
     </div>
   )
 }
-

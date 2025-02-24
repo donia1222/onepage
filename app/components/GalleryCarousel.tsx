@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { supabase } from "~/lib/supabaseClient"
-
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
 interface GalleryData {
   id: number
@@ -76,14 +76,14 @@ export default function GalleryCarousel() {
             className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-75 p-2 rounded-full hover:bg-opacity-100 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
             aria-label="Previous image"
           >
-
+            <ChevronLeft className="w-6 h-6 text-gray-800" />
           </button>
           <button
             onClick={handleNext}
             className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-75 p-2 rounded-full hover:bg-opacity-100 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
             aria-label="Next image"
           >
-
+            <ChevronRight className="w-6 h-6 text-gray-800" />
           </button>
           <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
             {images.map((_, index) => (
@@ -102,4 +102,5 @@ export default function GalleryCarousel() {
     </section>
   )
 }
+
 

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useCallback } from "react";
 
@@ -16,7 +16,6 @@ export default function NavigationPanel() {
   return (
     <nav className="p-4">
       <div className="flex items-center justify-between">
-   
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           className="text-white md:hidden"
@@ -105,6 +104,8 @@ export default function NavigationPanel() {
             <li>
               <a
                 href="/AdminPage"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="block text-gray-300 hover:text-white"
               >
                 Admin
@@ -176,7 +177,12 @@ export default function NavigationPanel() {
           </a>
         </li>
         <li>
-          <a href="/AdminPage" className="text-gray-300 hover:text-white">
+          <a
+            href="/AdminPage"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-300 hover:text-white"
+          >
             Admin
           </a>
         </li>
