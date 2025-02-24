@@ -4,7 +4,7 @@ import { useLoaderData, useFetcher } from "@remix-run/react"
 import { supabase } from "~/lib/supabaseClient"
 import EditFooter from "~/components/edit/EditFooter"
 import { useEffect, useState } from "react"
-import { ArrowLeft } from "lucide-react"
+
 interface FooterData {
   id: number
   companyname: string
@@ -53,7 +53,7 @@ export default function AdminFooter() {
   className="mr-4 p-2 rounded-full hover:bg-gray-200 transition-colors duration-200"
   aria-label="Go back"
 >
-  <ArrowLeft size={24} />
+
 </button>
       <h1 className="text-2xl font-bold mb-4">Panel de Administración - Footer</h1>
       <EditFooter initialData={footerData} onSave={() => fetcher.load("/adminFooter")} />

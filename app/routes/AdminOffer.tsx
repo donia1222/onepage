@@ -4,7 +4,7 @@ import { useLoaderData, useFetcher } from "@remix-run/react"
 import { supabase } from "~/lib/supabaseClient"
 import EditWhatWeOffer from "~/components/edit/EditWhatWeOffer"
 import { useEffect, useState } from "react"
-import { ArrowLeft } from "lucide-react"
+
 
 
 interface OfferData {
@@ -62,7 +62,7 @@ export default function AdminOffer() {
   className="mr-4 p-2 rounded-full hover:bg-gray-200 transition-colors duration-200"
   aria-label="Go back"
 >
-  <ArrowLeft size={24} />
+
 </button>
       <h1 className="text-2xl font-bold mb-4">Panel de Administración - Lo que Ofrecemos</h1>
       <EditWhatWeOffer initialData={offerData} onSave={() => fetcher.load("/adminOffer")} />

@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useState, useEffect } from "react"
 import { supabase } from "~/lib/supabaseClient"
-import { Mail, Phone, MapPin } from "lucide-react"
+
 
 interface FooterData {
   id: number
@@ -76,13 +76,13 @@ export default function Footer() {
                 </div>
                 <div className="space-y-2">
                   <p className="flex items-center">
-                    <Phone className="mr-2 h-5 w-5" /> {footerData.phone}
+   
                   </p>
                   <p className="flex items-center">
-                    <MapPin className="mr-2 h-5 w-5" /> {footerData.address}, {footerData.country} - {footerData.postal}
+                  
                   </p>
                   <p className="flex items-center">
-                    <Mail className="mr-2 h-5 w-5" /> {footerData.email}
+              
                   </p>
                 </div>
               </>
